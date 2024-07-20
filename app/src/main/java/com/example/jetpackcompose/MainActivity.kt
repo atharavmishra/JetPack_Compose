@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "", modifier = modifier
+        text = name, modifier = modifier
     )
 }
 
@@ -55,6 +55,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     JetPackComposeTheme {
-        Greeting("")
+        Greeting("Hello fuck you")
     }
 }
