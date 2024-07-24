@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -62,8 +63,8 @@ fun ImageCard(
 
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(15.dp),
+        modifier = Modifier.width(200.dp    ),
+        shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(5.dp)
     ) {
         Box(modifier = Modifier.height(200.dp)) {
