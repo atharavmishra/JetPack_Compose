@@ -1,12 +1,12 @@
 package com.example.jetpackcompose
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,21 +28,43 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.Room
+import com.example.jetpackcompose.repository.ContactDatabase
+import com.example.jetpackcompose.repository.ContactEntity
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    lateinit var database: ContactDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        database = Room.databaseBuilder(this, ContactDatabase::class.java, "ContactEntity").build()
+        val contactEntity =
+            ContactEntity(name = "Atharv", id = 0, contact = "8755328239", address = "Sector 75")
+        MainScope().launch {
+            database.contactDao().insertContact(contactEntity)
+        }
+
+//        var contactName: String? = null
+
+        database.contactDao().getContact().observe(this) {
+            Toast.makeText(this@MainActivity, it[0].name, Toast.LENGTH_SHORT).show()
+
+        }
+
+
+
         setContent {
             val painter = painterResource(id = R.drawable.hanuman)
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .padding(5.dp)
-                    .fillMaxHeight(),
+                    .height(200.dp),
             ) {
                 ImageCard(
                     painter = painter, contentDescription = "Lord Hanuman",
-                    title = "Lord Hanuman"
+                    title = "contactName.toString()"
                 )
             }
 
@@ -63,25 +85,29 @@ fun ImageCard(
 
 ) {
     Card(
-        modifier = Modifier.width(200.dp    ),
+        modifier = Modifier.width(200.dp),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(5.dp)
     ) {
-        Box(modifier = Modifier.height(200.dp)) {
+        Box(modifier) {
             Image(
                 painter = painter,
                 contentDescription = contentDescription,
                 contentScale = ContentScale.Crop
             )
-            Box(modifier = Modifier.fillMaxSize().background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Transparent,
-                        Color.Black
-                    ),
-                    startY = 300f
-                )
-            ))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Black
+                            ),
+                            startY = 300f
+                        )
+                    )
+            )
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter
             ) {
