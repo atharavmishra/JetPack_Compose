@@ -25,6 +25,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +37,12 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    lateinit var database: ContactDatabase
+    private lateinit var database: ContactDatabase
+
+    private val fontFamily = FontFamily(
+        Font(R.font.roboto_medium),
+        Font(R.font.roboto_medium_Italic)
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         database = Room.databaseBuilder(this, ContactDatabase::class.java, "ContactEntity").build()
@@ -62,9 +69,10 @@ class MainActivity : ComponentActivity() {
                     .padding(5.dp)
                     .height(200.dp),
             ) {
-                ImageCard(
-                    painter = painter, contentDescription = "Lord Hanuman",
-                    title = "contactName.toString()"
+                Text(
+                    text = "Hello",
+                    fontSize = 30.sp,
+                    fontFamily = fontFamily
                 )
             }
 
@@ -113,7 +121,8 @@ fun ImageCard(
             ) {
                 Text(
                     title, style = TextStyle(
-                        color = Color.White, fontSize = 15.sp
+                        color = Color.White,
+                        fontSize = 15.sp,
                     )
                 )
             }
