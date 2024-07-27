@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
     private val fontFamily = FontFamily(
         Font(R.font.roboto_medium),
-        Font(R.font.roboto_medium_Italic)
+        Font(R.font.roboto_medium_italic)
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
