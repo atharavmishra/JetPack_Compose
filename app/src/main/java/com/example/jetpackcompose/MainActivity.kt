@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
         Font(R.font.roboto_medium),
         Font(R.font.roboto_medium_italic)
     )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         database = Room.databaseBuilder(this, ContactDatabase::class.java, "ContactEntity").build()
@@ -61,14 +63,27 @@ class MainActivity : ComponentActivity() {
 
         }
 
-
-
         setContent {
             val painter = painterResource(id = R.drawable.hanuman)
-            Box(
-                modifier = Modifier
+            val color = remember {
+                mutableStateOf(Color.Magenta)
+            }
+            Column(
+                modifier = Modifier.fillMaxSize()
             ) {
-                ButtonBox(Modifier.fillMaxSize())
+                ButtonBox(
+                    Modifier
+                        .fillMaxSize()
+                        .weight(1f)) {
+                    color.value = it
+                }
+                Box(
+                    modifier = Modifier
+                        .background(color.value)
+                        .weight(1f)
+                        .fillMaxSize()
+                )
+
             }
 
         }
@@ -76,17 +91,19 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ButtonBox(modifier: Modifier = Modifier) {
-    val color = remember {
-        mutableStateOf(Color.Cyan)
-    }
+fun ButtonBox(
+    modifier: Modifier = Modifier,
+    updateColor: (Color) -> Unit
+) {
     Box(modifier = modifier
-        .background(color.value)
+        .background(Color.Yellow)
         .clickable {
-            color.value = Color(
-                Random.nextFloat(),
-                Random.nextFloat(),
-                Random.nextFloat()
+            updateColor(
+                Color(
+                    Random.nextFloat(),
+                    Random.nextFloat(),
+                    Random.nextFloat()
+                )
             )
         })
 }
