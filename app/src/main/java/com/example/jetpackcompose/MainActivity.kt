@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         database = Room.databaseBuilder(this, ContactDatabase::class.java, "ContactEntity").build()
         val contactEntity =
-            ContactEntity(name = "Atharv", id = 0, contact = "8755328239", address = "Sector 75")
+            ContactEntity(name = "Atharv ", id = 0, contact = "8755328239", address = "Sector 75")
         MainScope().launch {
             database.contactDao().insertContact(contactEntity)
         }
