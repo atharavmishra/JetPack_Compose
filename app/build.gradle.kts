@@ -98,5 +98,7 @@ dependencies {
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$roomVersion")
 
+    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
 
 }
