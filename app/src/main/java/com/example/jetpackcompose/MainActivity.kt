@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val painter = painterResource(id = R.drawable.hanuman)
+            painterResource(id = R.drawable.hanuman)
             val color = remember {
                 mutableStateOf(Color.Magenta)
             }
