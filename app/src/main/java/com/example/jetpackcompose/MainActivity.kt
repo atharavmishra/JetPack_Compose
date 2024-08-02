@@ -10,7 +10,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -40,6 +39,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.room.Room
@@ -47,7 +48,6 @@ import com.example.jetpackcompose.repository.ContactDatabase
 import com.example.jetpackcompose.repository.ContactEntity
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     private lateinit var database: ContactDatabase
@@ -106,28 +106,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ButtonBox(
-    modifier: Modifier = Modifier,
-    updateColor: (Color) -> Unit
+fun CircularProgressBar(
+    percentage: Float,
+    number: Int,
+    fontSize: TextUnit = 28.sp,
+    radius: Dp = 8.dp,
+    animDuration: Int = 1000,
+    animDelay: Int = 0
 ) {
-    Box(modifier = modifier
-        .background(Color.Yellow)
-        .clickable {
-            updateColor(
-                Color(
-                    Random.nextFloat(),
-                    Random.nextFloat(),
-                    Random.nextFloat()
-                )
-            )
-        })
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = name, modifier = modifier
-    )
 }
 
 @Composable
