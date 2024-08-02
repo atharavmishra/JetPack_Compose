@@ -1,23 +1,31 @@
 package com.example.jetpackcompose
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -57,37 +65,42 @@ class MainActivity : ComponentActivity() {
         MainScope().launch {
             database.contactDao().insertContact(contactEntity)
         }
-
         database.contactDao().getContact().observe(this) {
             Toast.makeText(this@MainActivity, it[0].name, Toast.LENGTH_SHORT).show()
-
         }
-
         setContent {
-
-
-            painterResource(id = R.drawable.hanuman)
-            val color = remember {
-                mutableStateOf(Color.Magenta)
+            var sizeState by remember { mutableStateOf(200.dp) }
+            val size by animateDpAsState(
+                targetValue = sizeState,
+                tween(
+                    durationMillis = 1000,
+                    delayMillis = 1000,
+                    easing = FastOutLinearInEasing,
+                ),
+                label = "Animate"
+            )
+            LaunchedEffect(Unit) {
+                Log.d("COMPOSITION", "SetContent")
             }
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                ButtonBox(
-                    Modifier
-                        .fillMaxSize()
-                        .weight(1f)) {
-                    color.value = it
+            Box {
+                LaunchedEffect(Unit) {
+                    Log.d("COMPOSITION", "Box")
                 }
-                Box(
-                    modifier = Modifier
-                        .background(color.value)
-                        .weight(1f)
-                        .fillMaxSize()
-                )
-
             }
+            Box(
+                modifier = Modifier
+                    .size(size)
+                    .background(Color.Red),
+                contentAlignment = Alignment.Center
+            ) {
+                Button(onClick = {
+                    sizeState += 300.dp
+                    Log.d("COMPOSITION", "Button")
 
+                }) {
+                    Text(text = "Increase Size")
+                }
+            }
         }
     }
 }
