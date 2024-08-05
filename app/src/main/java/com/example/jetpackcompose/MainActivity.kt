@@ -7,7 +7,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -37,6 +41,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -101,6 +106,7 @@ class MainActivity : ComponentActivity() {
                     Text(text = "Increase Size")
                 }
             }
+            CircularProgressBar(percentage = 15f, number = 20)
         }
     }
 }
@@ -111,9 +117,47 @@ fun CircularProgressBar(
     number: Int,
     fontSize: TextUnit = 28.sp,
     radius: Dp = 8.dp,
+    color: Color = Color.Green,
+    strokeWidth: Dp = 8.dp,
     animDuration: Int = 1000,
     animDelay: Int = 0
 ) {
+    var animationPlayed by remember {
+        mutableStateOf(true)
+    }
+
+    val curPercentage = animateFloatAsState(
+        targetValue = if (animationPlayed) percentage else 0f,
+        animationSpec = tween(
+            durationMillis = animDuration,
+            delayMillis = animDelay
+        ), label = "Percentage Animation"
+    )
+
+    LaunchedEffect(key1 = true) {
+        animationPlayed = true
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.size(radius*2f)) {
+            drawArc(
+                color = color,
+                -90f,
+                360 * curPercentage.value,
+                useCenter = false,
+                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Butt)
+            )
+        }
+        Text(
+            text = (curPercentage.value * number).toInt().toString(),
+            color = Color.Red, fontSize = fontSize,
+            fontWeight = FontWeight.Bold
+        )
+    }
+
 
 }
 
@@ -163,31 +207,6 @@ fun ImageCard(
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    val painter = painterResource(id = R.drawable.hanuman)
-    Text(
-        text = buildAnnotatedString {
-            withStyle(
-                style = SpanStyle(
-                    color = Color.Green,
-                    fontSize = 50.sp,
-                )
-            ) {
-                append("H")
-            }
-            append("ello")
-            withStyle(
-                style = SpanStyle(
-                    color = Color.Green,
-                    fontSize = 50.sp,
-                )
-            ) {
-                append("W")
-            }
-            append("orld")
-        },
-        fontSize = 30.sp,
-    )
-
-
+fun CircularProgressBarPreview(){
+    CircularProgressBar(percentage = 10f, number =100 )
 }
