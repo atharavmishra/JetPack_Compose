@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -35,14 +34,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -74,6 +69,17 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(this@MainActivity, it[0].name, Toast.LENGTH_SHORT).show()
         }
         setContent {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressBar(
+                    percentage = 0.8f,
+                    number = 100
+                )
+            }
+
+
             var sizeState by remember { mutableStateOf(200.dp) }
             val size by animateDpAsState(
                 targetValue = sizeState,
@@ -92,21 +98,20 @@ class MainActivity : ComponentActivity() {
                     Log.d("COMPOSITION", "Box")
                 }
             }
-            Box(
-                modifier = Modifier
-                    .size(size)
-                    .background(Color.Red),
-                contentAlignment = Alignment.Center
-            ) {
-                Button(onClick = {
-                    sizeState += 300.dp
-                    Log.d("COMPOSITION", "Button")
-
-                }) {
-                    Text(text = "Increase Size")
-                }
-            }
-            CircularProgressBar(percentage = 15f, number = 20)
+            /*  Box(
+                  modifier = Modifier
+                      .size(size)
+                      .background(Color.Red),
+                  contentAlignment = Alignment.Center
+              ) {
+                  Button(onClick = {
+                      sizeState += 300.dp
+                      Log.d("COMPOSITION", "Button")
+  
+                  }) {
+                      Text(text = "Increase Size")
+                  }
+              }*/
         }
     }
 }
@@ -116,14 +121,14 @@ fun CircularProgressBar(
     percentage: Float,
     number: Int,
     fontSize: TextUnit = 28.sp,
-    radius: Dp = 8.dp,
+    radius: Dp = 50.dp,
     color: Color = Color.Green,
     strokeWidth: Dp = 8.dp,
     animDuration: Int = 1000,
     animDelay: Int = 0
 ) {
     var animationPlayed by remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     val curPercentage = animateFloatAsState(
@@ -134,21 +139,22 @@ fun CircularProgressBar(
         ), label = "Percentage Animation"
     )
 
+//    animationPlayed = true
     LaunchedEffect(key1 = true) {
         animationPlayed = true
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.size(radius * 2f)
     ) {
-        Canvas(modifier = Modifier.size(radius*2f)) {
+        Canvas(modifier = Modifier.size(radius * 2f)) {
             drawArc(
                 color = color,
                 -90f,
                 360 * curPercentage.value,
                 useCenter = false,
-                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Butt)
+                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
             )
         }
         Text(
