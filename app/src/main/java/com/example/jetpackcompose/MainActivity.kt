@@ -79,7 +79,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-
             var sizeState by remember { mutableStateOf(200.dp) }
             val size by animateDpAsState(
                 targetValue = sizeState,
